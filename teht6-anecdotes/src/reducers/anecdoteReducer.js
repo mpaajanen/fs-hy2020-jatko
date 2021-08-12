@@ -40,8 +40,6 @@ const reducer = (state = initialState, action) => {
         }
         return state.concat(newAnecdote)
     default:
-      console.log('state now: ', state)
-      console.log('action', action)
       return state
   }
 }
