@@ -14,17 +14,20 @@ const reducer = (state = null, action) => {
   }
 }
 
+let timeoutId
 export const setNotification = (message, time) => {
+  if(timeoutId) {
+    clearTimeout(timeoutId)
+  }
   return async dispatch => {
     dispatch({
       type: 'NOTIFY',
       message: message,
     })
-    setTimeout(() => {
+    timeoutId = setTimeout(() => {
       dispatch(notificationOff())
     }, time * 1000)
   }
-
 }
 
 export const notificationOnVoted = (id, anecdotes) => {
