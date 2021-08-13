@@ -6,9 +6,25 @@ const reducer = (state = null, action) => {
     case 'OFF':
       console.log('off')
       return action.message
+    case 'NOTIFY':
+      console.log('set')
+      return action.message
     default:
       return state
   }
+}
+
+export const setNotification = (message, time) => {
+  return async dispatch => {
+    dispatch({
+      type: 'NOTIFY',
+      message: message,
+    })
+    setTimeout(() => {
+      dispatch(notificationOff())
+    }, time * 1000)
+  }
+
 }
 
 export const notificationOnVoted = (id, anecdotes) => {
