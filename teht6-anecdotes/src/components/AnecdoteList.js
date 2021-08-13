@@ -16,8 +16,8 @@ const AnecdoteList = (props) => {
   const dispatch = useDispatch()
 
   const vote = (id) => {
-    console.log('vote', id)
-    dispatch(voteAnecdote(id))
+    const anecdoteVoted = anecdotes.find(n => n.id === id)
+    dispatch(voteAnecdote(anecdoteVoted))
     dispatch(notificationOnVoted(id, anecdotes))
     setTimeout(() => {
       dispatch(notificationOff())
