@@ -2,11 +2,8 @@ import React from 'react'
 import { useParams } from 'react-router'
 
 const Anecdote = ({ anecdotes }) => {
-  console.log(anecdotes)
   const id = useParams().id
-  console.log(id)
   const anecdote = anecdotes.find(n => n.id === id)
-  console.log(anecdote)
   return (
     <div>
       <h2>
