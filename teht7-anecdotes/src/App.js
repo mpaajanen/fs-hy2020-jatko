@@ -7,6 +7,7 @@ import Footer from './components/Footer'
 import About from './components/About'
 import CreateNew from './components/CreateNew'
 import Home from './components/Home'
+import Anecdote from './components/Anecdote'
 
 const App = () => {
   const padding = {
@@ -65,6 +66,9 @@ const App = () => {
         </Route>
         <Route path='/about'>
           <About />
+        </Route>
+        <Route path='/anecdotes/:id'>
+          <Anecdote anecdotes={anecdotes} />
         </Route>
         <Route path='/'>
           <Home anecdotes={anecdotes} />
