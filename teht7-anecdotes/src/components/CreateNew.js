@@ -2,9 +2,9 @@ import React from 'react'
 import { useField } from '../hooks'
 
 const CreateNew = (props) => {
-  const content = useField('text')
-  const author = useField('text')
-  const info = useField('text')
+  const {onReset: resetContent, ...content} = useField('text')
+  const {onReset: resetAuthor, ...author} = useField('text')
+  const {onReset: resetInfo, ...info} = useField('text')
   
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -15,7 +15,13 @@ const CreateNew = (props) => {
       votes: 0
     })
   }
-  
+
+  const resetFields = () => {
+      resetContent()
+      resetAuthor()
+      resetInfo()
+  }
+
   return (
     <div>
       <h2>create a new anecdote</h2>
@@ -32,7 +38,8 @@ const CreateNew = (props) => {
           url for more info
           <input {...info} />
         </div>
-        <button>create</button>
+        <button type='submit'>create</button>
+        <button type='button' onClick={resetFields}>reset</button>
       </form>
     </div>
   )
