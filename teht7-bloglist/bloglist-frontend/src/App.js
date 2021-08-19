@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from 'react'
+import { useDispatch } from 'react-redux'
 import Blog from './components/Blog'
 import BlogForm from './components/BlogForm'
 import Notification from './components/Notification'
 import blogService from './services/blogs'
 import loginService from './services/login'
+import { setNotification } from './reducers/notificationReducer'
 
 const App = () => {
+  const dispatch = useDispatch()
+
   const [blogs, setBlogs] = useState([])
-  const [errorMessage, setErrorMessage] = useState(null)
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
@@ -46,10 +49,7 @@ const App = () => {
       setUsername('')
       setPassword('')
     } catch (exception) {
-      setErrorMessage('wrong credentials')
-      setTimeout(() => {
-        setErrorMessage(null)
-      }, 5000)
+      dispatch(setNotification('wrong credentials', 5))
     }
   }
 
@@ -58,35 +58,24 @@ const App = () => {
   }
 
   const handleCreate = (blogObject) => {
-    // console.log('created new entry', title, author, url)
-
     blogService
       .create(blogObject)
       .then(returnedBlog => {
         setBlogs(blogs.concat(returnedBlog))
-        setErrorMessage(`new blog ${returnedBlog.title} by ${returnedBlog.author} added`)
-        setTimeout(() => {
-          setErrorMessage(null)
-        }, 5000)
+        dispatch(setNotification(`new blog ${returnedBlog.title} by ${returnedBlog.author} added`, 5))
       })
-
   }
 
   const likeAdder = (likedBlog, id) => {
-    console.log('Apista', likedBlog)
     blogService
       .update(id, likedBlog)
       .then(() => {
         setBlogs(blogs.map(blog => blog.id === id ? likedBlog : blog))
       })
-    setErrorMessage(`${likedBlog.title} was liked`)
-    setTimeout(() => {
-      setErrorMessage(null)
-    }, 5000)
+    dispatch(setNotification(`${likedBlog.title} was liked`, 5))
   }
 
   const handleRemove = (id) => {
-    console.log('poista', id)
     if(window.confirm('Remove blog?')) {
       blogService
         .del(id)
@@ -117,7 +106,7 @@ const App = () => {
     return (
       <div>
         <h2>Log in to application</h2>
-        <Notification message={errorMessage} />
+        <Notification />
         <form onSubmit={handleLogin}>
           <div>
             username
@@ -148,7 +137,7 @@ const App = () => {
   return (
     <div>
       <h2>blogs</h2>
-      <Notification message={errorMessage} />
+      <Notification />
       <div>
         {user.name} is logged in
         <form onSubmit={handleLogout}>
