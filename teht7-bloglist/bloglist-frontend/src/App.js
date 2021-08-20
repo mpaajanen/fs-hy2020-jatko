@@ -2,17 +2,20 @@ import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import BlogList from './components/BlogList'
 import BlogForm from './components/BlogForm'
+import UserList from './components/UserList'
 import Notification from './components/Notification'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import { setNotification } from './reducers/notificationReducer'
 import { addBlog, getBlogs } from './reducers/blogReducer'
-import { loginUser, logoutUser } from './reducers/userReducer'
+import { loginUser, logoutUser } from './reducers/loginReducer'
+import { getUsers } from './reducers/usersReducer'
 
 const App = () => {
   const dispatch = useDispatch()
   const blogs = useSelector(state => state.blogs)
   const user = useSelector(state => state.user)
+  const users = useSelector(state => state.users)
 
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
@@ -21,6 +24,10 @@ const App = () => {
   useEffect(() => {
     dispatch(getBlogs())
   }, [blogs])
+
+  useEffect(() => {
+    dispatch(getUsers())
+  }, [users])
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
@@ -128,6 +135,7 @@ const App = () => {
       {blogForm()}
       <div>
         <BlogList blogs={blogsSorted} user={user} />
+        <UserList users={users} />
       </div>
     </div>
   )
