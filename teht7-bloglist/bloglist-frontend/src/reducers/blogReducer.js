@@ -8,16 +8,21 @@ const reducer = (state = [], action) => {
     )
   case 'CREATE':
     return [...state, action.data]
-  case 'INIT_BLOGS':
+  case 'REMOVE':
+    return state.filter(blog =>
+      blog.id === action.data.id ? null : blog
+    )
+  case 'GET_BLOGS':
     return action.data
   default:
     return state
   }
 }
 
-export const voteBlog = blog => {
+export const addLike = blog => {
+  console.log(blog)
   return async dispatch => {
-    const updatedBlog = await blogService.update(blog)
+    const updatedBlog = await blogService.update(blog.id, blog)
     dispatch({
       type: 'INCREMENT',
       data: updatedBlog
@@ -35,11 +40,22 @@ export const addBlog = blog => {
   }
 }
 
-export const initializeBlogs = () => {
+export const removeBlog = blog => {
+  return async dispatch => {
+    const id = blog.id
+    const removedBlog = await blogService.del(id)
+    dispatch({
+      type: 'REMOVE',
+      data: removedBlog
+    })
+  }
+}
+
+export const getBlogs = () => {
   return async dispatch => {
     const blogs = await blogService.getAll()
     dispatch({
-      type: 'INIT_BLOGS',
+      type: 'GET_BLOGS',
       data: blogs
     })
   }

@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-const Blog = ({ blog, likeAdder, handleRemove, user }) => {
+const Blog = ({ blog, addLike, handleRemove, user }) => {
   const blogStyle = {
     border: 'solid',
     borderWidth: 1,
@@ -14,13 +14,13 @@ const Blog = ({ blog, likeAdder, handleRemove, user }) => {
     setInfoVisible(!infoVisible)
   }
 
-  const addLike = () => {
+  const likeBlog = () => {
     const likedBlog = {
       ...blog,
       likes: blog.likes + 1,
       user: blog.user.id
     }
-    likeAdder(likedBlog, blog.id)
+    addLike(likedBlog, blog.id)
   }
 
   const removeBlog = () => {
@@ -36,7 +36,7 @@ const Blog = ({ blog, likeAdder, handleRemove, user }) => {
         {blog.title} {blog.author} <button onClick={toggleVisibility}>hide</button><br />
         {blog.url}<br />
         <div id="likes">
-          likes: {blog.likes} <button onClick={addLike} id="like-button">like</button><br />
+          likes: {blog.likes} <button onClick={likeBlog} id="like-button">like</button><br />
         </div>
         {blog.user === undefined ? '' : blog.user.name}<br />
         {blog.user.username === user.username ? <button onClick={removeBlog} id="remove-button">remove</button> : ''}

@@ -1,30 +1,25 @@
 import React, { useState, useEffect } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import BlogList from './components/BlogList'
 import BlogForm from './components/BlogForm'
 import Notification from './components/Notification'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import { setNotification } from './reducers/notificationReducer'
-import { addBlog, initializeBlogs } from './reducers/blogReducer'
+import { addBlog, getBlogs } from './reducers/blogReducer'
 
 const App = () => {
   const dispatch = useDispatch()
+  const blogs = useSelector(state => state.blogs)
 
-  // const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
   const [createVisible, setCreateVisible] = useState(false)
 
   useEffect(() => {
-    dispatch(initializeBlogs())
-  //   blogService.getAll().then(blogs => {
-  //     const sortedBlogs = blogs.sort((a,b) => b.likes - a.likes)
-  //     setBlogs( sortedBlogs )
-  //   })
-  // }, [blogs])
-  }, [dispatch])
+    dispatch(getBlogs())
+  }, [blogs])
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
@@ -34,6 +29,10 @@ const App = () => {
       blogService.setToken(user.token)
     }
   }, [])
+
+  const blogsSorted = [...blogs].sort((a, b) => {
+    return b.likes - a.likes
+  })
 
   const handleLogin = async (event) => {
     event.preventDefault()
@@ -63,12 +62,6 @@ const App = () => {
   const handleCreate = (blogObject) => {
     dispatch(addBlog(blogObject))
     dispatch(setNotification(`new blog ${blogObject.title} by ${blogObject.author} added`, 5))
-    // blogService
-    //   .create(blogObject)
-    //   .then(returnedBlog => {
-    //     setBlogs(blogs.concat(returnedBlog))
-    //     dispatch(setNotification(`new blog ${returnedBlog.title} by ${returnedBlog.author} added`, 5))
-    //   })
   }
 
   const blogForm = () => {
@@ -132,10 +125,7 @@ const App = () => {
       </div>
       {blogForm()}
       <div>
-        <BlogList user={user} />
-        {/* {blogs.map(blog =>
-          <Blog key={blog.id} blog={blog} likeAdder={likeAdder} handleRemove={handleRemove} user={user} />
-        )} */}
+        <BlogList blogs={blogsSorted} user={user} />
       </div>
     </div>
   )
