@@ -20,7 +20,6 @@ const reducer = (state = [], action) => {
 }
 
 export const addLike = blog => {
-  console.log(blog)
   return async dispatch => {
     const updatedBlog = await blogService.update(blog.id, blog)
     dispatch({

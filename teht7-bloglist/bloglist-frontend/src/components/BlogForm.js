@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import PropTypes from 'prop-types'
+// import PropTypes from 'prop-types'
 
 const BlogForm = ({ handleSubmit }) => {
   const [title, setTitle] = useState('')
@@ -66,14 +66,14 @@ const BlogForm = ({ handleSubmit }) => {
   )
 }
 
-BlogForm.propTypes = {
-  handleSubmit: PropTypes.func.isRequired,
-  title: PropTypes.string.isRequired,
-  author: PropTypes.string.isRequired,
-  url: PropTypes.string.isRequired,
-  handleTitleChange: PropTypes.func.isRequired,
-  handleAuthorChange: PropTypes.func.isRequired,
-  handleUrlChange: PropTypes.func.isRequired
-}
+// BlogForm.propTypes = {
+//   handleSubmit: PropTypes.func.isRequired,
+//   title: PropTypes.string.isRequired,
+//   author: PropTypes.string.isRequired,
+//   url: PropTypes.string.isRequired,
+//   handleTitleChange: PropTypes.func.isRequired,
+//   handleAuthorChange: PropTypes.func.isRequired,
+//   handleUrlChange: PropTypes.func.isRequired
+// }
 
 export default BlogForm

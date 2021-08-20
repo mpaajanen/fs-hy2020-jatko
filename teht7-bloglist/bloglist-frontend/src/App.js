@@ -14,7 +14,8 @@ import { setNotification } from './reducers/notificationReducer'
 import { addBlog, getBlogs } from './reducers/blogReducer'
 import { loginUser, logoutUser } from './reducers/loginReducer'
 import { getUsers } from './reducers/usersReducer'
-import UserInfo from './components/userInfo'
+import UserInfo from './components/UserInfo'
+import BlogInfo from './components/BlogInfo'
 
 const App = () => {
   const dispatch = useDispatch()
@@ -137,6 +138,7 @@ const App = () => {
         <form onSubmit={handleLogout}>
           <button type="submit">logout</button>
         </form>
+        {blogForm()}
       </div>
 
       <Notification />
@@ -146,14 +148,14 @@ const App = () => {
         </Route>
         <Route path='/users'>
           <UserList users={users} />
-          {/* <About /> */}
+        </Route>
+        <Route path='/blogs/:id'>
+          <BlogInfo blogs={blogs} />
         </Route>
         <Route path='/'>
           <BlogList blogs={blogsSorted} user={user} />
-          {/* <Home anecdotes={anecdotes} /> */}
         </Route>
       </Switch>
-      {blogForm()}
     </div>
   )
 }
