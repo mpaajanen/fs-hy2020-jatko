@@ -22,6 +22,7 @@ const BlogList = ({ blogs, user }) => {
 
   return (
     <div>
+      <h2>Blogs</h2>
       {blogs.map(blog =>
         <Blog key={blog.id} blog={blog} addLike={handleLike} handleRemove={handleRemove} user={user} />
       )}

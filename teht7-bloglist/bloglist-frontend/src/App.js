@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import {
+  Switch, Route, Link,
+  // useHistory,
+} from 'react-router-dom'
 import BlogList from './components/BlogList'
 import BlogForm from './components/BlogForm'
 import UserList from './components/UserList'
@@ -10,9 +14,11 @@ import { setNotification } from './reducers/notificationReducer'
 import { addBlog, getBlogs } from './reducers/blogReducer'
 import { loginUser, logoutUser } from './reducers/loginReducer'
 import { getUsers } from './reducers/usersReducer'
+import UserInfo from './components/userInfo'
 
 const App = () => {
   const dispatch = useDispatch()
+  // const history = useHistory()
   const blogs = useSelector(state => state.blogs)
   const user = useSelector(state => state.user)
   const users = useSelector(state => state.users)
@@ -124,19 +130,30 @@ const App = () => {
 
   return (
     <div>
-      <h2>blogs</h2>
-      <Notification />
       <div>
+        <Link to='/'>blogs</Link>&nbsp;
+        <Link to='/users'>users</Link>&nbsp;
         {user.name} is logged in
         <form onSubmit={handleLogout}>
           <button type="submit">logout</button>
         </form>
       </div>
+
+      <Notification />
+      <Switch>
+        <Route path='/users/:id'>
+          <UserInfo users={users} />
+        </Route>
+        <Route path='/users'>
+          <UserList users={users} />
+          {/* <About /> */}
+        </Route>
+        <Route path='/'>
+          <BlogList blogs={blogsSorted} user={user} />
+          {/* <Home anecdotes={anecdotes} /> */}
+        </Route>
+      </Switch>
       {blogForm()}
-      <div>
-        <BlogList blogs={blogsSorted} user={user} />
-        <UserList users={users} />
-      </div>
     </div>
   )
 }
