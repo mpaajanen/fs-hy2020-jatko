@@ -12,6 +12,15 @@ router.get('/', async (request, response) => {
   response.json(blogs)
 })
 
+router.get('/:id/comments', async (request, response) => {
+  const id = request.params.id
+  const comments = await Comment
+    .find({
+      blog: id
+    })
+  response.json(comments)
+})
+
 router.delete('/:id', async (request, response) => {
   const decodedToken = jwt.verify(request.token, process.env.SECRET)
 
