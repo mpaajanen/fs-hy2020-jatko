@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { Form, Row, Col, Button } from 'react-bootstrap'
 // import PropTypes from 'prop-types'
 
 const BlogForm = ({ handleSubmit }) => {
@@ -26,42 +27,58 @@ const BlogForm = ({ handleSubmit }) => {
 
   return (
     <div>
-      <h2>create new</h2>
-      <div>
-        <form onSubmit={handleCreate}>
-          <div>
-                    title:
-            <input
+      <h2>Add new blog</h2>
+      <Form onSubmit={handleCreate}>
+        <Form.Group as={Row}>
+          <Col sm={1}>
+            <Form.Label>
+            Title:
+            </Form.Label>
+          </Col>
+          <Col>
+            <Form.Control
               id="title"
               type="text"
               value={title}
               name="Title"
               onChange={handleTitleChange}
             />
-          </div>
-          <div>
-                    author:
-            <input
+          </Col>
+        </Form.Group>
+        <Form.Group as={Row}>
+          <Col sm={1}>
+            <Form.Label>
+            Author:
+            </Form.Label>
+          </Col>
+          <Col>
+            <Form.Control
               id="author"
               type="text"
               value={author}
               name="Author"
               onChange={handleAuthorChange}
             />
-          </div>
-          <div>
-                    url:
-            <input
+          </Col>
+        </Form.Group>
+        <Form.Group as={Row}>
+          <Col sm={1}>
+            <Form.Label>
+            Url:
+            </Form.Label>
+          </Col>
+          <Col>
+            <Form.Control
               id="url"
               type="text"
               value={url}
               name="Url"
               onChange={handleUrlChange}
             />
-          </div>
-          <button type="submit" id="create-button">create</button>
-        </form>
-      </div>
+          </Col>
+        </Form.Group>
+        <Button variant='primary' type="submit" id="create-button">Create</Button>
+      </Form>
     </div>
   )
 }

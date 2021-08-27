@@ -16,6 +16,7 @@ import { loginUser, logoutUser } from './reducers/loginReducer'
 import { getUsers } from './reducers/usersReducer'
 import UserInfo from './components/UserInfo'
 import BlogInfo from './components/BlogInfo'
+import { Form, Button, Navbar, Nav } from 'react-bootstrap'
 
 const App = () => {
   const dispatch = useDispatch()
@@ -63,6 +64,7 @@ const App = () => {
       )
       blogService.setToken(user.token)
       dispatch(loginUser(user))
+      dispatch(setNotification(`${username} logged in`, 5))
       setUsername('')
       setPassword('')
     } catch (exception) {
@@ -87,11 +89,11 @@ const App = () => {
     return (
       <div>
         <div style={hideWhenVisible}>
-          <button onClick={() => setCreateVisible(true)} id="add-button">add blog</button>
+          <Button variant='primary' onClick={() => setCreateVisible(true)} id="add-button">Add blog</Button>
         </div>
-        <div style={showWhenVisible}>
+        <div className='container' style={showWhenVisible}>
           <BlogForm handleSubmit={handleCreate} />
-          <button onClick={() => setCreateVisible(false)}>cancel</button>
+          <Button variant='warning' onClick={() => setCreateVisible(false)}>Cancel</Button>
         </div>
       </div>
     )
@@ -99,45 +101,62 @@ const App = () => {
 
   if (user === null) {
     return (
-      <div>
+      <div className='container'>
         <h2>Log in to application</h2>
         <Notification />
         <form onSubmit={handleLogin}>
-          <div>
-            username
-            <input
+          <Form.Group>
+            <Form.Label>
+              Username:
+            </Form.Label>
+            <Form.Control
               id="username"
               type="text"
               value={username}
               name="Username"
               onChange={({ target }) => setUsername(target.value)}
             />
-          </div>
-          <div>
-            password
-            <input
+          </Form.Group>
+          <Form.Group>
+            <Form.Label>
+              Password:
+            </Form.Label>
+            <Form.Control
               id="password"
               type="password"
               value={password}
               name="Password"
               onChange={({ target }) => setPassword(target.value)}
             />
-          </div>
-          <button type="submit" id="login-button">login</button>
+            <Button variant='primary' type="submit" id="login-button">login</Button>
+          </Form.Group>
         </form>
       </div>
     )
   }
 
   return (
-    <div>
+    <div className='container'>
       <div>
-        <Link to='/'>blogs</Link>&nbsp;
-        <Link to='/users'>users</Link>&nbsp;
-        {user.name} is logged in
-        <form onSubmit={handleLogout}>
-          <button type="submit">logout</button>
-        </form>
+        <Navbar collapseOnSelect expand='lg' bg='light' variant='light'>
+          <Navbar.Toggle aria-controls='responsive-navbar-nav' />
+          <Navbar.Collapse id='responsive-navbar-nav'>
+            <Nav className='mr-auto'>
+              <Nav.Link href="#" as='span'>
+                <Link to='/'>[ B L O G S ]</Link>&nbsp;
+              </Nav.Link>
+              <Nav.Link href="#" as='span'>
+                <Link to='/users'>[ U S E R S ]</Link>&nbsp;
+              </Nav.Link>
+              <Nav.Link href="#" as='span'>
+                <form onSubmit={handleLogout}>
+                  {user.name} is logged in&nbsp;
+                  <Button variant='dark' size='sm' type="submit">logout</Button>
+                </form>
+              </Nav.Link>
+            </Nav>
+          </Navbar.Collapse>
+        </Navbar>
         {blogForm()}
       </div>
 

@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux'
 import { removeBlog, addLike } from '../reducers/blogReducer'
 import { setNotification } from '../reducers/notificationReducer'
 import Blog from './Blog'
+import { Table } from 'react-bootstrap'
 
 const BlogList = ({ blogs, user }) => {
   const dispatch = useDispatch()
@@ -23,9 +24,17 @@ const BlogList = ({ blogs, user }) => {
   return (
     <div>
       <h2>Blogs</h2>
-      {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} addLike={handleLike} handleRemove={handleRemove} user={user} />
-      )}
+      <Table striped>
+        <tbody>
+          {blogs.map(blog =>
+            <tr key={blog.id}>
+              <td>
+                <Blog key={blog.id} blog={blog} addLike={handleLike} handleRemove={handleRemove} user={user} />
+              </td>
+            </tr>
+          )}
+        </tbody>
+      </Table>
     </div>
   )
 }

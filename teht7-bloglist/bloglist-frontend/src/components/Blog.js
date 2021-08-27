@@ -1,57 +1,18 @@
 import React from 'react'
-// import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 
-// const Blog = ({ blog, addLike, handleRemove, user: blog }) => {
 const Blog = ({ blog }) => {
-  const blogStyle = {
-    border: 'solid',
-    borderWidth: 1,
-    margin: 5
-  }
-  // const [infoVisible, setInfoVisible] = useState(false)
-
-  // const hideWhenVisible = { display: infoVisible ? 'none' : '' }
-  // const showWhenVisible = { display: infoVisible ? '' : 'none' }
-
-  // const toggleVisibility = () => {
-  //   setInfoVisible(!infoVisible)
+  // const blogStyle = {
+  //   border: 'solid',
+  //   borderWidth: 1,
+  //   margin: 5
   // }
-
-  // const likeBlog = () => {
-  //   const likedBlog = {
-  //     ...blog,
-  //     likes: blog.likes + 1,
-  //     user: blog.user.id
-  //   }
-  //   addLike(likedBlog, blog.id)
-  // }
-
-  // const removeBlog = () => {
-  //   handleRemove(blog.id)
-  // }
-
-  // return (
-  //   <div style={blogStyle} id="listedBlogs">
-  //     <div style={hideWhenVisible} className='hidden'>
-  //       {blog.title} {blog.author} <button onClick={toggleVisibility} id="view-button">view</button>
-  //     </div>
-  //     <div style={showWhenVisible} className='shown'>
-  //       {blog.title} {blog.author} <button onClick={toggleVisibility}>hide</button><br />
-  //       {blog.url}<br />
-  //       <div id="likes">
-  //         likes: {blog.likes} <button onClick={likeBlog} id="like-button">like</button><br />
-  //       </div>
-  //       {blog.user === undefined ? '' : blog.user.name}<br />
-  //       {blog.user.username === user.username ? <button onClick={removeBlog} id="remove-button">remove</button> : ''}
-  //     </div>
-  //   </div>
-  // )
   return (
-    <div style={blogStyle} id="listedBlogs">
+    <div id="listedBlogs">
       <Link to={`/blogs/${blog.id}`}>
-        {blog.title}&nbsp;
+        {blog.title}
       </Link>
+      &nbsp;[ likes: {blog.likes} ]
     </div>
   )
 }
