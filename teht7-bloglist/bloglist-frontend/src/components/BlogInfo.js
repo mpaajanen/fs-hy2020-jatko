@@ -1,32 +1,29 @@
+// import React from 'react'
 import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams, useHistory } from 'react-router'
 import { setNotification } from '../reducers/notificationReducer'
-import { addLike } from '../reducers/blogReducer'
-import { removeBlog } from '../reducers/blogReducer'
+import { addLike, addComment, removeBlog } from '../reducers/blogReducer'
 import blogService from '../services/blogs'
 import Comments from './Comments'
 
-const BlogInfo = ({ blogs }) => {
+// const BlogInfo = ({ blogs }) => {
+const BlogInfo = () => {
   const dispatch = useDispatch()
   const history = useHistory()
   const id = useParams().id
-  const blog = blogs.find(n => n.id === id)
   const user = useSelector(state => state.user)
+  const blogs = useSelector(state => state.blogs)
+  const blog = blogs.find(n => n.id === id)
 
   const [comments, setComments] = useState([])
 
   useEffect(() => {
     const fetchComments = async () => {
       const blogComments = await blogService.getComments(id)
-      console.log(blogComments)
       setComments(blogComments)
     }
     fetchComments()
-  }, [])
-
-  useEffect(() => {
-    console.log(comments)
   }, [comments])
 
   const likeBlog = () => {
@@ -49,6 +46,10 @@ const BlogInfo = ({ blogs }) => {
     }
   }
 
+  const createComment = (commentObject) => {
+    dispatch(addComment(commentObject))
+  }
+
   if (!blog) {
     return null
   }
@@ -61,7 +62,8 @@ const BlogInfo = ({ blogs }) => {
       added by {blog.user.name}&nbsp;
       {/* {blog.user === undefined ? '' : blog.user.name}<br /> */}
       {blog.user.username === user.username ? <button onClick={handleRemove} id="remove-button">remove</button> : ''}
-      <Comments comments={comments} />
+      {/* <Comments comments={blog.comments} createComment={createComment} /> */}
+      <Comments comments={comments} createComment={createComment} />
     </div>
   )
 }

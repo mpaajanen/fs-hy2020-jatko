@@ -150,7 +150,8 @@ const App = () => {
           <UserList users={users} />
         </Route>
         <Route path='/blogs/:id'>
-          <BlogInfo blogs={blogs} />
+          {/* <BlogInfo blogs={blogs} /> */}
+          <BlogInfo />
         </Route>
         <Route path='/'>
           <BlogList blogs={blogsSorted} user={user} />

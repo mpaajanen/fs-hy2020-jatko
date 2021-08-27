@@ -8,6 +8,10 @@ const reducer = (state = [], action) => {
     )
   case 'CREATE':
     return [...state, action.data]
+  case 'ADD_COMMENT':
+    return state.map(blog =>
+      blog.id === action.data.blog.id ? action.data.blog : blog
+    )
   case 'REMOVE':
     return state.filter(blog =>
       blog.id === action.data.id ? null : blog
@@ -24,6 +28,16 @@ export const addLike = blog => {
     const updatedBlog = await blogService.update(blog.id, blog)
     dispatch({
       type: 'INCREMENT',
+      data: updatedBlog
+    })
+  }
+}
+
+export const addComment = commentObject => {
+  return async dispatch => {
+    const updatedBlog = await blogService.createComment(commentObject)
+    dispatch({
+      type: 'ADD_COMMENT',
       data: updatedBlog
     })
   }
