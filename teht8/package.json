@@ -1,0 +1,11 @@
+{
+  "name": "teht8",
+  "version": "0.0.1",
+  "description": "GraphQL",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Mikko Paajanen",
+  "license": "ISC"
+}
