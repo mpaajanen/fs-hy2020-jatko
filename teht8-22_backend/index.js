@@ -1,5 +1,24 @@
+require('dotenv').config()
 const { ApolloServer, gql } = require('apollo-server')
 const { v1: uuid } = require('uuid')
+const mongoose = require('mongoose')
+const Author = require('./models/author')
+const Book = require('./models/book')
+
+// const MONGODB_URI = `mongodb+srv://fullstack:${password}@cluster0-dw3tr.mongodb.net/teht8?retryWrites=true`
+// console.log(process.env)
+
+const MONGODB_URI = process.env.MONGODB_URI
+
+console.log('connecting to', MONGODB_URI)
+
+mongoose.connect(MONGODB_URI)
+  .then(() => {
+    console.log('connected to MongoDB')
+  })
+  .catch((error) => {
+    console.log('error connecting to MongoDB', error.message)
+  })
 
 let authors = [
   {
