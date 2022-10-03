@@ -4,8 +4,16 @@ const Authors = (props) => {
   if (!props.show) {
     return null
   }
-  // const authors = []
   const authors = props.authors
+
+  const showEditAuthor = (token) => {
+    if (!token) {
+      return
+    }
+    return ( 
+      <EditAuthor authors={authors} />
+    )
+  }
 
   return (
     <div>
@@ -26,7 +34,8 @@ const Authors = (props) => {
           ))}
         </tbody>
       </table>
-      <EditAuthor authors={authors} />
+      {showEditAuthor(props.token)}
+      {/* <EditAuthor authors={authors} /> */}
     </div>
   )
 }
