@@ -11,10 +11,10 @@ const App = () => {
   const [page, setPage] = useState('authors')
   const resultAuthors = useQuery(ALL_AUTHORS)
   const resultBooks = useQuery(ALL_BOOKS)
-  // const resultGenres = useQuery(ALL_GENRES)
+  const resultGenres = useQuery(ALL_GENRES)
   const client = useApolloClient()
 
-  if (resultAuthors.loading || resultBooks.loading) {
+  if (resultAuthors.loading || resultBooks.loading || resultGenres.loading) {
     return <div>loading...</div>
   }
 
@@ -47,8 +47,8 @@ const App = () => {
       </div>
 
       <Authors show={page === 'authors'} authors={resultAuthors.data.allAuthors} token={token} />
-      {/* <Books show={page === 'books'} books={resultBooks.data.allBooks} genres={resultGenres.data.allGenres} /> */}
-      <Books show={page === 'books'} books={resultBooks.data.allBooks} />
+      <Books show={page === 'books'} books={resultBooks.data.allBooks} genres={resultGenres.data.allGenres} />
+      {/* <Books show={page === 'books'} books={resultBooks.data.allBooks} /> */}
       <NewBook show={page === 'add'} />
       <LoginForm show={page === 'login'} setToken={setToken} setPage={setPage} />
     </div>
