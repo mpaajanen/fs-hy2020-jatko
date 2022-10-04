@@ -1,3 +1,5 @@
+import Genres from "./Genres"
+
 const Books = (props) => {
   if (!props.show) {
     return null
@@ -25,6 +27,7 @@ const Books = (props) => {
           ))}
         </tbody>
       </table>
+      {/* <Genres genres={props.genres} /> */}
     </div>
   )
 }

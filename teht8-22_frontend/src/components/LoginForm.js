@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { useMutation } from '@apollo/client'
 import { LOGIN } from '../queries'
 
-const LoginForm = (props) => {
+const LoginForm = ({show, setToken, setPage}) => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   
@@ -13,12 +13,13 @@ const LoginForm = (props) => {
   useEffect(() => {
     if (result.data) {
       const token = result.data.login.value
-      props.setToken(token)
+      setToken(token)
       localStorage.setItem('gql-library-user-token', token)
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [result.data])
   
-  if (!props.show) {
+  if (!show) {
     return null
   }
 
@@ -27,7 +28,7 @@ const LoginForm = (props) => {
     login({ variables: { username, password } })
     setUsername('')
     setPassword('')
-    props.setPage('authors')
+    setPage('authors')
   }
 
   return (

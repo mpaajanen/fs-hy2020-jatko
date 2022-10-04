@@ -124,6 +124,7 @@ const typeDefs = gql`
     authorCount: Int!
     allBooks(author: String, genre: String): [Book!]!
     allAuthors: [Author!]!
+    allGenres: [String!]!
     me: User
   }
 
@@ -191,6 +192,17 @@ const resolvers = {
       }
     },
     allAuthors: async () => Author.find({}),
+    allGenres: async () => {
+      const genres = []
+      const books = await Book.find({})
+      books.forEach(book => {
+        book.genres.forEach(genre => {
+          genres.includes(genre) ? null: genres.push(genre)
+        });
+        console.log(book.genres)
+      });
+      return genres
+    }
   },
   Author: {
     bookCount: (root) => {
@@ -211,11 +223,13 @@ const resolvers = {
           const author = new Author({ name: args.author })
           await author.validate()
           authorId = author._id
-          const validateBook = new Book({ ...args, author: authorId })
+          // const validateBook = new Book({ ...args, author: authorId })
+          const validateBook = new Book({ ...args, author })
           await validateBook.validate()
           await author.save()
         }
-        const book = new Book({ ...args, author: authorId })
+        // const book = new Book({ ...args, author: authorId })
+        const book = new Book({ ...args, author: await Author.findOne({ name: args.author }) })
         await book.save()
         return book
       } catch (error) {
