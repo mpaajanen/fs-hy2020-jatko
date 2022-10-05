@@ -202,6 +202,9 @@ const resolvers = {
         console.log(book.genres)
       });
       return genres
+    },
+    me: (root, args, context) => {
+      return context.currentUser
     }
   },
   Author: {
