@@ -7,7 +7,8 @@ const Books = (props) => {
   const [genre, setGenre] = useState(null)
   const booksByGenre = useQuery(ALL_BOOKS_BY_GENRE, {
     variables: { genre },
-    skip: !genre
+    skip: !genre,
+    fetchPolicy: "cache-and-network",
   })
 
   if (!props.show) {
