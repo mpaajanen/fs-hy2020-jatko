@@ -9,6 +9,10 @@ export const ALL_AUTHORS = gql`
     }
   }
   `
+      // bookCount
+      // authorOf {
+      //   title
+      // }
 
 export const ALL_BOOKS = gql`
   query {
