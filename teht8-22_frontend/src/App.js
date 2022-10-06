@@ -1,11 +1,27 @@
 import { useState } from 'react'
-import { useApolloClient, useQuery } from '@apollo/client'
+import { useApolloClient, useQuery, useSubscription } from '@apollo/client'
 import Authors from './components/Authors'
 import Books from './components/Books'
 import NewBook from './components/NewBook'
 import LoginForm from './components/LoginForm'
-import { ALL_AUTHORS, ALL_BOOKS, ALL_GENRES } from './queries'
+import { ALL_AUTHORS, ALL_BOOKS, ALL_GENRES, BOOK_ADDED } from './queries'
 import Recommendations from './components/Recommendations'
+
+export const updateCache = (cache, query, bookAdded) => {
+  const uniqByTitle = (books) => {
+    let seen = new Set()
+    return books.filter((item) => {
+      let k = item.title
+      return seen.has(k) ? false : seen.add(k)
+    })
+  }
+
+  cache.updateQuery(query, ({ allBooks }) => {
+    return {
+      allBooks: uniqByTitle(allBooks.concat(bookAdded)),
+    }
+  })
+}
 
 const App = () => {
   const [token, setToken] = useState(null)
@@ -15,6 +31,19 @@ const App = () => {
   const resultGenres = useQuery(ALL_GENRES)
   const client = useApolloClient()
 
+  useSubscription(BOOK_ADDED, {
+    onSubscriptionData: ({ subscriptionData }) => {
+      const bookAdded  = subscriptionData.data.bookAdded
+      window.alert(`${bookAdded.title} was added!`)
+
+      client.cache.updateQuery({ query: ALL_BOOKS }, ({ allBooks }) => {
+        return {
+          allBooks: allBooks.concat(bookAdded)
+        }
+      })
+    }
+  })
+  
   if (resultAuthors.loading || resultBooks.loading || resultGenres.loading) {
     return <div>loading...</div>
   }

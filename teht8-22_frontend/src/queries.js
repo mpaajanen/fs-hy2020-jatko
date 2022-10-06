@@ -96,3 +96,30 @@ export const ME = gql`
     }
   }
 `
+const BOOK_DETAILS = gql`
+  fragment BookDetails on Book {
+    title
+    author {
+      name
+    }
+    genres
+    published
+  }
+`
+
+// export const BOOK_ADDED = gql`
+//   subscription {
+//     bookAdded {
+//       title
+//     }
+//   }
+// `
+export const BOOK_ADDED = gql`
+  subscription {
+    bookAdded {
+      ...BookDetails
+    }
+  }
+
+  ${BOOK_DETAILS}
+`
