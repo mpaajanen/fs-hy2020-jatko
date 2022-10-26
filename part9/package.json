@@ -7,7 +7,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "ts-node": "ts-node",
     "multiply": "ts-node multiplier.ts",
-    "calculator": "ts-node calculator.ts"
+    "calculator": "ts-node calculator.ts",
+    "calculateBmi": "ts-node bmiCalculator.ts",
+    "calculateExercises": "ts-node exerciseCalculator.ts"
   },
   "author": "Mikko Paajanen",
   "license": "ISC",
