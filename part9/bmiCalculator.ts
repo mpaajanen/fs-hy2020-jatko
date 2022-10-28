@@ -35,7 +35,7 @@ if (args.length < 4) throw new Error('Not enough arguments.');
 const calculateBmi = (heigth: number, weight: number): bmiDescription => {
   const heightInMeters: number = heigth / 100;
   const calculatedTreshold: number = (weight / (heightInMeters * heightInMeters))
-  const category = bmiCategories.find(cat => cat.treshold > calculatedTreshold)
+  const category = bmiCategories.find(cat => cat.treshold > calculatedTreshold) || { description: 'Category not found.', treshold: 0 }
   return category.description
 }
 
@@ -50,3 +50,5 @@ try {
   }
   console.log(errorMessage)
 }
+
+export default calculateBmi
