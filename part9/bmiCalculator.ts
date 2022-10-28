@@ -15,7 +15,7 @@ const bmiCategories = [
   { description: 'Obese (Class I)', treshold: 35.0 },
   { description: 'Obese (Class II)', treshold: 40.0 },
   { description: 'Obese (Class III)', treshold: 999.0 },
-]
+];
 
 const parseBmiArgs = (args: Array<string>): BmiValues => {
 if (args.length < 4) throw new Error('Not enough arguments.');
@@ -25,22 +25,22 @@ if (args.length < 4) throw new Error('Not enough arguments.');
     return {
       height: Number(args[2]),
       weigth: Number(args[3])
-    }
+    };
   } else {
     throw new Error('Provided values were not numbers!');
   }
 
-}
+};
 
 const calculateBmi = (heigth: number, weight: number): bmiDescription => {
   const heightInMeters: number = heigth / 100;
-  const calculatedTreshold: number = (weight / (heightInMeters * heightInMeters))
-  const category = bmiCategories.find(cat => cat.treshold > calculatedTreshold) || { description: 'Category not found.', treshold: 0 }
-  return category.description
-}
+  const calculatedTreshold: number = (weight / (heightInMeters * heightInMeters));
+  const category = bmiCategories.find(cat => cat.treshold > calculatedTreshold) || { description: 'Category not found.', treshold: 0 };
+  return category.description;
+};
 
 try {
-  const { height, weigth } = parseBmiArgs(process.argv)
+  const { height, weigth } = parseBmiArgs(process.argv);
   // console.log(calculateBmi(180, 74));
   console.log(calculateBmi(height, weigth));
 } catch (error: unknown) {
@@ -48,7 +48,7 @@ try {
   if (error instanceof Error) {
     errorMessage += ' Error: ' + error.message;
   }
-  console.log(errorMessage)
+  console.log(errorMessage);
 }
 
-export default calculateBmi
+export default calculateBmi;
