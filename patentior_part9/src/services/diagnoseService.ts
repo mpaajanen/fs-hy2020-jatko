@@ -2,10 +2,17 @@ import diagnoseData from '../../data/diagnoses';
 
 import { Diagnose } from '../types';
 
-const diagnoses: Array<Diagnose> = diagnoseData;
+const diagnoses: Diagnose[] = diagnoseData;
 
-const getEntries = (): Array<Diagnose> => {
+const getEntries = (): Diagnose[] => {
+  // return diagnoses.map(({ code, name, latin }) => ({
+  //   code,
+  //   name,
+  //   latin,
+  // }));
   return diagnoses;
 };
 
-export default getEntries;
+export default {
+  getEntries
+};
