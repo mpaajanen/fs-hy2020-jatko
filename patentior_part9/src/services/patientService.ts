@@ -34,5 +34,5 @@ const addPatient = (entry: NewPatient): Patient => {
 export default {
   getEntries,
   getEntriesNoSsn,
-  addPatient
+  addPatient,
 };

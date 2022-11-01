@@ -2,9 +2,9 @@ POST http://localhost:3001/api/patients/
 Content-Type: application/json
 
 {
-    "name": "Mikko Paajanen",
+    "name": "Esko Myyrä",
     "dateOfBirth": "1982-07-02",
-    "ssn": "020782-0000",
+    "ssn": "020782A9999",
     "gender": "male",
-    "occupation": "student"
+    "occupation": true
 }
