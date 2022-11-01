@@ -1,0 +1,10 @@
+POST http://localhost:3001/api/patients/
+Content-Type: application/json
+
+{
+    "name": "Mikko Paajanen",
+    "dateOfBirth": "1982-07-02",
+    "ssn": "020782-0000",
+    "gender": "male",
+    "occupation": "student"
+}
