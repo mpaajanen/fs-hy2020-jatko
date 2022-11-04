@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { v1 as uuid } from 'uuid';
 import patientData from '../../data/patients';
 
@@ -12,12 +10,13 @@ const getEntries = (): Array<Patient> => {
 };
 
 const getEntriesNoSsn = (): Omit<Patient, 'ssn'>[] => {
-  return patients.map(({ id, name, dateOfBirth, gender, occupation }) => ({
+  return patients.map(({ id, name, dateOfBirth, gender, occupation, entries }) => ({
     id,
     name,
     dateOfBirth,
     gender,
     occupation,
+    entries,
   }));
 };
 
