@@ -1,4 +1,4 @@
-import { Gender, NewPatient } from './types';
+import { Entry, Gender, NewPatient } from './types';
 
 const isString = (text: unknown): text is string => {
   return typeof text === 'string' || text instanceof String;
@@ -11,6 +11,10 @@ const isDate = (date: string): boolean => {
 const isSsn = (ssn: string): boolean => {
   const regex = new RegExp('\\d{6}[-+A]\\d{3}[0-9A-Y]');
   return regex.test(ssn);
+};
+
+const isEntry = (entries: unknown): entries is Entry[] => {
+  return typeof entries === "object" || entries instanceof Array;
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -55,15 +59,23 @@ const parseOccupation = (occupation: unknown): string => {
   return occupation;
 };
 
-type Fields = { name: unknown, dateOfBirth: unknown, ssn: unknown, gender: unknown, occupation: unknown };
+const parseEntries = (entries: unknown): Entry[] => {
+  if ( !entries || !isEntry(entries) ) {
+    throw new Error("Incorrect or missing entries: " + entries);
+  }
+  return entries;
+};
 
-const toNewPatient = ({ name, dateOfBirth, ssn, gender, occupation }: Fields): NewPatient => {
+type Fields = { name: unknown, dateOfBirth: unknown, ssn: unknown, gender: unknown, occupation: unknown, entries?: unknown };
+
+const toNewPatient = ({ name, dateOfBirth, ssn, gender, occupation, entries = [] }: Fields): NewPatient => {
   const newEntry: NewPatient = {
     name: parseName(name),
     dateOfBirth: parseDoB(dateOfBirth),
     ssn: parseSsn(ssn),
     gender: parseGender(gender),
-    occupation: parseOccupation(occupation)
+    occupation: parseOccupation(occupation),
+    entries: parseEntries(entries),
   };
   return newEntry;
 };
