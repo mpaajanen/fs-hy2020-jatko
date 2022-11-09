@@ -4,11 +4,13 @@ import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { apiBaseUrl } from '../constants';
 import { Patient } from '../types';
+import MaleIcon from '@mui/icons-material/Male';
+import FemaleIcon from '@mui/icons-material/Female';
+import { Box, Typography } from '@material-ui/core';
 
 const PatientPage = () => {
   const { id } = useParams<{ id: string }>();
   const [{ selectedPatient }, dispatch] = useStateValue();
-  console.log(selectedPatient);
   React.useEffect(() => {
     const patientId = id || '';
     void axios.get<void>(`${apiBaseUrl}/patients/${patientId}`);
@@ -26,11 +28,25 @@ const PatientPage = () => {
     void fetchSelectedPatient();
   }, [dispatch]);
 
+  if (!selectedPatient) {
+    return (
+      <div>
+        loading...
+      </div>
+    );
+  }
 
   return (
     <div>
-      {/* {id} {selectedPatient.name} */}
-      {id} {selectedPatient ? selectedPatient.name : ''}
+      <Box>
+        <Typography variant="h6">
+         {selectedPatient.name} {selectedPatient.gender === 'female' ? <FemaleIcon /> : <MaleIcon />}
+        </Typography>
+        <Typography variant="body1">
+          ssn: {selectedPatient.ssn}<br />
+          occupation: {selectedPatient.occupation}
+        </Typography>
+      </Box>
     </div>
   );
 };
