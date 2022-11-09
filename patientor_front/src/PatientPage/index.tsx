@@ -1,5 +1,5 @@
 import React from 'react';
-import { useStateValue } from '../state';
+import { setSelectedPatient, useStateValue } from '../state';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { apiBaseUrl } from '../constants';
@@ -20,7 +20,7 @@ const PatientPage = () => {
         const { data: patientFromApi } = await axios.get<Patient>(
           `${apiBaseUrl}/patients/${patientId}`
         );
-        dispatch({ type: "SET_SELECTED_PATIENT", payload: patientFromApi });
+        dispatch(setSelectedPatient(patientFromApi));
       } catch (e) {
         console.error(e);
       }
@@ -40,7 +40,7 @@ const PatientPage = () => {
     <div>
       <Box>
         <Typography variant="h6">
-         {selectedPatient.name} {selectedPatient.gender === 'female' ? <FemaleIcon /> : <MaleIcon />}
+         {selectedPatient.name} {selectedPatient.gender === 'other' ? '' : selectedPatient.gender === 'female' ? <FemaleIcon /> : <MaleIcon />}
         </Typography>
         <Typography variant="body1">
           ssn: {selectedPatient.ssn}<br />
