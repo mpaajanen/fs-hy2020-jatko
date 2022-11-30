@@ -7,6 +7,8 @@ import { Patient } from '../types';
 import MaleIcon from '@mui/icons-material/Male';
 import FemaleIcon from '@mui/icons-material/Female';
 import { Box, Typography } from '@material-ui/core';
+import { List, ListItem, ListItemIcon, ListItemText } from '@mui/material';
+import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 
 const PatientPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -39,12 +41,32 @@ const PatientPage = () => {
   return (
     <div>
       <Box>
-        <Typography variant="h6">
+        <Typography variant="h4">
          {selectedPatient.name} {selectedPatient.gender === 'other' ? '' : selectedPatient.gender === 'female' ? <FemaleIcon /> : <MaleIcon />}
         </Typography>
         <Typography variant="body1">
           ssn: {selectedPatient.ssn}<br />
           occupation: {selectedPatient.occupation}
+        </Typography>
+        <Typography variant="h5">
+          Entries:
+        </Typography>
+        <Typography variant="body1">
+          {selectedPatient.entries.map((entry, idx) => (
+            <div key={idx}>
+              <Box key={idx}>{entry.date} <i>{entry.description}</i></Box>
+              <List dense={true}>
+                {entry?.diagnosisCodes?.map((code, idx) => (
+                  <ListItem key={idx}>
+                    <ListItemIcon>
+                      <ArrowRightIcon />
+                    </ListItemIcon>
+                    <ListItemText primary={code} />
+                  </ListItem>
+                ))}
+              </List>
+            </div>
+          ))}
         </Typography>
       </Box>
     </div>
