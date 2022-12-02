@@ -9,6 +9,7 @@ import FemaleIcon from '@mui/icons-material/Female';
 import { Box, Typography } from '@material-ui/core';
 import { List, ListItem, ListItemIcon, ListItemText } from '@mui/material';
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
+import Entries from './Entries';
 
 const PatientPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -54,6 +55,7 @@ const PatientPage = () => {
           ssn: {selectedPatient.ssn}<br />
           occupation: {selectedPatient.occupation}
         </Typography>
+        <Entries selectedPatient={selectedPatient} diagnosis={diagnosis}/>
         <Typography variant="h5">
           Entries:
         </Typography>
