@@ -12,7 +12,7 @@ import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 
 const PatientPage = () => {
   const { id } = useParams<{ id: string }>();
-  const [{ selectedPatient }, dispatch] = useStateValue();
+  const [{ selectedPatient, diagnosis }, dispatch] = useStateValue();
   React.useEffect(() => {
     const patientId = id || '';
     void axios.get<void>(`${apiBaseUrl}/patients/${patientId}`);
@@ -29,6 +29,12 @@ const PatientPage = () => {
     };
     void fetchSelectedPatient();
   }, [dispatch]);
+
+  const diagnoseName = (code: string): string => {
+    const objs = Object.entries(diagnosis);
+    const diagnose = objs.find(obj => obj[0] === code);
+    return diagnose ? diagnose[1].name : '';
+  };
 
   if (!selectedPatient) {
     return (
@@ -51,23 +57,23 @@ const PatientPage = () => {
         <Typography variant="h5">
           Entries:
         </Typography>
-        <Typography variant="body1">
           {selectedPatient.entries.map((entry, idx) => (
-            <div key={idx}>
-              <Box key={idx}>{entry.date} <i>{entry.description}</i></Box>
+            <Box key={idx}>
+              <Box>
+              <Typography variant="body1">{entry.date} <i>{entry.description}</i></Typography>
+              </Box>
               <List dense={true}>
-                {entry?.diagnosisCodes?.map((code, idx) => (
+                {entry.diagnosisCodes?.map((code, idx) => (
                   <ListItem key={idx}>
                     <ListItemIcon>
                       <ArrowRightIcon />
                     </ListItemIcon>
-                    <ListItemText primary={code} />
+                    <ListItemText primary={`${code} ${diagnoseName(code)}`} />
                   </ListItem>
                 ))}
               </List>
-            </div>
+            </Box>
           ))}
-        </Typography>
       </Box>
     </div>
   );
