@@ -7,8 +7,6 @@ import { Patient } from '../types';
 import MaleIcon from '@mui/icons-material/Male';
 import FemaleIcon from '@mui/icons-material/Female';
 import { Box, Typography } from '@material-ui/core';
-import { List, ListItem, ListItemIcon, ListItemText } from '@mui/material';
-import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 import Entries from './Entries';
 
 const PatientPage = () => {
@@ -31,12 +29,6 @@ const PatientPage = () => {
     void fetchSelectedPatient();
   }, [dispatch]);
 
-  const diagnoseName = (code: string): string => {
-    const objs = Object.entries(diagnosis);
-    const diagnose = objs.find(obj => obj[0] === code);
-    return diagnose ? diagnose[1].name : '';
-  };
-
   if (!selectedPatient) {
     return (
       <div>
@@ -56,26 +48,6 @@ const PatientPage = () => {
           occupation: {selectedPatient.occupation}
         </Typography>
         <Entries selectedPatient={selectedPatient} diagnosis={diagnosis}/>
-        <Typography variant="h5">
-          Entries:
-        </Typography>
-          {selectedPatient.entries.map((entry, idx) => (
-            <Box key={idx}>
-              <Box>
-              <Typography variant="body1">{entry.date} <i>{entry.description}</i></Typography>
-              </Box>
-              <List dense={true}>
-                {entry.diagnosisCodes?.map((code, idx) => (
-                  <ListItem key={idx}>
-                    <ListItemIcon>
-                      <ArrowRightIcon />
-                    </ListItemIcon>
-                    <ListItemText primary={`${code} ${diagnoseName(code)}`} />
-                  </ListItem>
-                ))}
-              </List>
-            </Box>
-          ))}
       </Box>
     </div>
   );
