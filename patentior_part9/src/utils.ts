@@ -1,4 +1,14 @@
-import { Entry, Gender, NewPatient } from './types';
+import { Entry, 
+         Gender, 
+         NewPatient, 
+         NewEntry,
+         EntryType,
+         Diagnose,
+         Discharge,
+         HealthCheckRating,
+         Sickleave,
+         NewBaseEntry
+        } from './types';
 
 const isString = (text: unknown): text is string => {
   return typeof text === 'string' || text instanceof String;
@@ -68,7 +78,7 @@ const parseEntries = (entries: unknown): Entry[] => {
 
 type Fields = { name: unknown, dateOfBirth: unknown, ssn: unknown, gender: unknown, occupation: unknown, entries?: unknown };
 
-const toNewPatient = ({ name, dateOfBirth, ssn, gender, occupation, entries = [] }: Fields): NewPatient => {
+export const toNewPatient = ({ name, dateOfBirth, ssn, gender, occupation, entries = [] }: Fields): NewPatient => {
   const newEntry: NewPatient = {
     name: parseName(name),
     dateOfBirth: parseDoB(dateOfBirth),
@@ -80,4 +90,124 @@ const toNewPatient = ({ name, dateOfBirth, ssn, gender, occupation, entries = []
   return newEntry;
 };
 
-export default toNewPatient;
+const parseDescription = (description: unknown): string => {
+  if ( !description || !isString(description) ) {
+    throw new Error("Incorrect or missing description: " + description);
+  }
+  return description;
+};
+
+const isEntryType = (type: unknown): type is EntryType => {
+  return typeof type === 'string' || type instanceof String;
+};
+
+const parseType = (type: unknown): EntryType => {
+  if ( !type || !isEntryType(type) ) {
+    throw new Error("Incorrect or missing type: " + type);
+  }
+  return type;
+};
+
+const isDiagnosisCodes = (diagnosisCodes: unknown): diagnosisCodes is Array<Diagnose["code"]> => {
+  return typeof diagnosisCodes === "object" || diagnosisCodes instanceof Array;
+};
+
+const parseDiagnosisCodes = (diagnosisCodes: unknown): Array<Diagnose["code"]> => {
+  if ( !diagnosisCodes || !isDiagnosisCodes(diagnosisCodes) ) {
+    throw new Error("Incorrect or missing diganosis codes: " + diagnosisCodes);
+  }
+  return diagnosisCodes;
+};
+
+const isDischarge = (discharge: unknown): discharge is Discharge => {
+  return typeof discharge === "object" || discharge instanceof Array;
+};
+
+const parseDischarge = (discharge: unknown): Discharge => {
+  if ( !discharge || !isDischarge(discharge) ) {
+    throw new Error("Incorrect or missing discharge: " + discharge);
+    
+  }
+  return discharge;
+};
+
+const isHealthCheckRating = (healthCheckRating: unknown): healthCheckRating is HealthCheckRating => {
+  return typeof healthCheckRating === "object" || healthCheckRating instanceof Array;
+};
+
+const parseHealthCheckRating = (healthCheckRating: unknown): HealthCheckRating => {
+  if ( !healthCheckRating || !isHealthCheckRating(healthCheckRating) ) {
+    throw new Error("Incorrect or missing health check rating: " + healthCheckRating);
+  }
+  return healthCheckRating;
+};
+
+const parseEmployerName = (employerName: unknown): string => {
+  if ( !employerName || !isString(employerName) ) {
+    throw new Error("Incorrect or missing employer name: " + employerName);
+  }
+  return employerName;
+};
+
+const isSickleave = (sickleave: unknown): sickleave is Sickleave => {
+  return typeof sickleave === "object" || sickleave instanceof Array;
+};
+
+const parseSickleave = (sickleave: unknown): Sickleave => {
+  if ( !isSickleave(sickleave) ) {
+    throw new Error("Incorrect sickleave information: " + sickleave);
+  }
+  return sickleave;
+};
+
+type EntryFields = { description: unknown, 
+                     date: unknown, 
+                     specialist: unknown, 
+                     type: unknown,
+                     diagnosisCodes?: unknown, 
+                     healthCheckRating?: unknown, 
+                     discharge?: unknown, 
+                     employerName?: unknown, 
+                     sickLeave?: unknown
+                   };
+
+export const toNewEntry = ({ description, date, specialist, type, diagnosisCodes, healthCheckRating, discharge, employerName, sickLeave }: EntryFields): NewEntry => {
+  const newEntry: NewBaseEntry = {
+    description: parseDescription(description),
+    date: parseDoB(date),
+    specialist: parseDescription(specialist),
+    type: parseType(type),
+    ...diagnosisCodes ? {diagnosisCodes: parseDiagnosisCodes(diagnosisCodes)} : null,
+  };
+
+  switch (type) {
+    case "Hospital":
+      const newHospitalEntry: NewEntry = {
+        ...newEntry,
+        type: "Hospital",
+        discharge: parseDischarge(discharge),
+      };
+      return newHospitalEntry;
+    case "HealthCheck":
+      const newHealthCheckEntry: NewEntry = {
+        ...newEntry,
+        type: "HealthCheck",
+        healthCheckRating: parseHealthCheckRating(healthCheckRating),
+      };
+      return newHealthCheckEntry;
+    case "OccupationalHealthcare":
+      const newOccupationalHealthcareEntry: NewEntry = {
+        ...newEntry,
+        type: "OccupationalHealthcare",
+        employerName: parseEmployerName(employerName),
+        ...sickLeave ? {sickLeave: parseSickleave(sickLeave)} : null,
+      };
+      return newOccupationalHealthcareEntry;
+    default:
+      return assertNever(type as never);
+  }
+};
+
+const assertNever = (value: never): never => {
+  throw new Error(`Unhandled discriminated union member: ${JSON.stringify(value)}`);
+};
