@@ -3,13 +3,13 @@ import { Grid, Button } from "@material-ui/core";
 import { Field, Formik, Form } from "formik";
 
 import { TextField, SelectField, TypeOption } from "./FormField";
-import { Entry } from "../types";
+import { HospitalEntry } from "../types";
 
 /*
  * use type Patient, but omit id and entries,
  * because those are irrelevant for new patient object.
  */
-export type EntryFormValues = Omit<Entry, "id" >;
+export type EntryFormValues = Omit<HospitalEntry, "id" >;
 
 interface Props {
   onSubmit: (values: EntryFormValues) => void;
@@ -30,6 +30,10 @@ export const AddEntryForm = ({ onSubmit, onCancel }: Props) => {
         date: "",
         specialist: "",
         type: "Hospital",
+        discharge: {
+          date: "",
+          criteria: ""
+        }
       }}
       onSubmit={onSubmit}
       validate={(values) => {
@@ -46,6 +50,9 @@ export const AddEntryForm = ({ onSubmit, onCancel }: Props) => {
         }
         if (!values.type) {
           errors.type = requiredError;
+        }
+        if (!values.discharge) {
+          errors.discharge = requiredError;
         }
         return errors;
       }}
@@ -69,6 +76,18 @@ export const AddEntryForm = ({ onSubmit, onCancel }: Props) => {
               label="Specialist"
               placeholder="Specialist"
               name="specialist"
+              component={TextField}
+            />
+            <Field
+              label="Discharge date"
+              placeholder="YYYY-MM-DD"
+              name="discharge.date"
+              component={TextField}
+            />
+            <Field
+              label="Discharge criteria"
+              placeholder="Criteria"
+              name="discharge.criteria"
               component={TextField}
             />
             <SelectField label="Type" name="type" options={typeOptions} />

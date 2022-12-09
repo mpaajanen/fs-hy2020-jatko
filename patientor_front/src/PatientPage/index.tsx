@@ -1,9 +1,9 @@
 import React from 'react';
-import { addPatient, setSelectedPatient, useStateValue } from '../state';
+import { addEntry, setSelectedPatient, useStateValue } from '../state';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { apiBaseUrl } from '../constants';
-import { Patient } from '../types';
+import { Entry, Patient } from '../types';
 import MaleIcon from '@mui/icons-material/Male';
 import FemaleIcon from '@mui/icons-material/Female';
 import { Box, Button, Typography } from '@material-ui/core';
@@ -43,11 +43,11 @@ const PatientPage = () => {
 
   const submitNewEntry = async (values: EntryFormValues) => {
     try {
-      const { data: newPatient } = await axios.post<Patient>(
-        `${apiBaseUrl}/patients`,
+      const { data: newEntry } = await axios.post<Entry>(
+        `${apiBaseUrl}/patients/${id as string}/entries`,
         values
       );
-      dispatch(addPatient(newPatient));
+      dispatch(addEntry({id: id as string, entry: newEntry}));
       closeModal();
     } catch (e: unknown) {
       if (axios.isAxiosError(e)) {
