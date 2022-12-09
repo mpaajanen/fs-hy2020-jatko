@@ -1,0 +1,13 @@
+POST http://localhost:3001/api/patients/83527cc0-779f-11ed-815b-3d22afadd802/entries
+Content-Type: application/json
+
+{
+  "description": "Testing problems.",
+  "date": "2022-12-09",
+  "specialist": "Full Stack Healthcare",
+  "type": "Hospital",
+  "discharge": {
+    "date": "2022-12-09",
+    "criteria": "Everything works just fine."
+  }
+}
