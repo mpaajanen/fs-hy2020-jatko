@@ -38,12 +38,15 @@ export const AddEntryForm = ({ onSubmit, onCancel }: Props) => {
       onSubmit={onSubmit}
       validate={(values) => {
         const requiredError = "Field is required";
+        const dateFormatError = "Date must be in YYYY-MM-DD format.";
         const errors: { [field: string]: string } = {};
         if (!values.description) {
           errors.description = requiredError;
         }
         if (!values.date) {
           errors.date = requiredError;
+        } else if (!/^\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$/i.test(values.date)) {
+          errors.date = dateFormatError;
         }
         if (!values.specialist) {
           errors.specialist = requiredError;
