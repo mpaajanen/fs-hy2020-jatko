@@ -2,24 +2,10 @@ import React from "react";
 import { Grid, Button } from "@material-ui/core";
 import { Field, Formik, Form } from "formik";
 
-import { TextField, SelectField, TypeOption } from "./FormField";
-import { HealthCheckEntry, OccupationalHealthcareEntry, HospitalEntry, HealthCheckRating } from "../types";
-// import { HospitalEntry } from "../types";
+import { TextField, SelectField, TypeOption, HealthCheckRatingOption } from "./FormField";
+import { HealthCheckEntry, OccupationalHealthcareEntry, HospitalEntry } from "../types";
 
 export type EntryFormValues = Omit<HospitalEntry, "id" > | Omit<OccupationalHealthcareEntry, "id"> | Omit<HealthCheckEntry, "id">;
-export type EntryFormValues2 = Omit<HealthCheckEntry, "id" >;
-
-export interface AllFormValues {
-  description: string,
-  date: string,
-  specialist: string,
-  type: "HealthCheck" | "OccupationalHealthcare" | "Hospital",
-  discharge?: {
-    date: string,
-    criteria: string
-  }
-  healthCheckRating?: HealthCheckRating,
-}
 
 interface Props {
   onSubmit: (values: EntryFormValues) => void;
@@ -27,49 +13,71 @@ interface Props {
 }
 
 const typeOptions: TypeOption[] = [
-  { value: "Hospital", label: "Hospital" },
   { value: "HealthCheck", label: "Health Check" },
   { value: "OccupationalHealthcare", label: "Occupational Healthcare" },
+  { value: "Hospital", label: "Hospital" },
 ];
 
-const healthCheckRatingOptions: TypeOption[] = [
-  { value: "Healthy", label: "Healthy" },
-  { value: "LowRisk", label: "Low Risk" },
-  { value: "HighRisk", label: "High Risk" },
-  { value: "CriticalRisk", label: "Critical Risk" },
+const healthCheckRatingOptions: HealthCheckRatingOption[] = [
+  { value: 0, label: "Healthy" },
+  { value: 1, label: "Low Risk" },
+  { value: 2, label: "High Risk" },
+  { value: 3, label: "Critical Risk" },
 ];
-
-// const baseValues =  {
-//   description: "",
-//   date: "",
-//   specialist: "",
-// };
 
 const formValues: EntryFormValues = {
   description: "",
   date: "",
   specialist: "",
-  // type: "Hospital",
   type: "HealthCheck",
-  // discharge: {
-  //   date: "",
-  //   criteria: ""
-  // },
   healthCheckRating: 0,
 };
+
+function validateDate(value: string) {
+  let error;
+  if (!value) {
+    error = 'Field is required.';
+  } else if (!/^\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$/i.test(value)) {
+    error = 'Date must be in YYYY-MM-DD format.';
+  }
+  return error;
+}
+
+function validateRequired(value: string) {
+  return !value ? 'Field is required' : null;
+}
 
 const extraFieldsByEntryType = (type: string) => {
   switch (type) {
     case "HealthCheck":
       return (
         <SelectField label="Healthcheck Rating" name="healthCheckRating" options={healthCheckRatingOptions} />
-  
-      // <Field
-      //   label="Healthcheck Rating"
-      //   placeholder="0, 1, 2 or 3"
-      //   name="healthCheckRating"
-      //   component={TextField}
-      // />
+      );
+    case "OccupationalHealthcare":
+      return (
+        <>
+        <Field
+          label="Employer name"
+          placeholder="Employer name"
+          name="employerName"
+          component={TextField}
+          validate={validateRequired}
+        />
+        <Field
+          label="Sickleave start date"
+          placeholder="YYYY-MM-DD"
+          name="sickLeave.startDate"
+          component={TextField}
+          validate={validateDate}
+        />
+        <Field
+          label="Sickleave end date"
+          placeholder="YYYY-MM-DD"
+          name="sickLeave.endDate"
+          component={TextField}
+          validate={validateDate}
+        />
+      </>
       );
     case "Hospital":
       return (
@@ -79,19 +87,20 @@ const extraFieldsByEntryType = (type: string) => {
             placeholder="YYYY-MM-DD"
             name="discharge.date"
             component={TextField}
-          />
+            validate={validateDate}
+            />
           <Field
             label="Discharge criteria"
             placeholder="Criteria"
             name="discharge.criteria"
             component={TextField}
+            validate={validateRequired}
           />
         </>
       );  
     default:
       break;
   }
-
 };
 
 export const AddEntryForm = ({ onSubmit, onCancel }: Props) => {
@@ -117,17 +126,16 @@ export const AddEntryForm = ({ onSubmit, onCancel }: Props) => {
         if (!values.type) {
           errors.type = requiredError;
         }
-        // if (!values.discharge) {
+        // if (values.type === "Hospital" && !values.discharge) {
         //   errors.discharge = requiredError;
         // }
         return errors;
       }}
     >
       {({ isValid, dirty, values }) => {
-        console.log({values});
-        // if (values.type === "Hospital") {
         return (
           <Form className="form ui">
+            <SelectField label="Type" name="type" options={typeOptions} />
             <Field
               label="Description"
               placeholder="Description"
@@ -147,25 +155,6 @@ export const AddEntryForm = ({ onSubmit, onCancel }: Props) => {
               component={TextField}
             />
             {extraFieldsByEntryType(values.type)}
-            {/* <Field
-              label="Discharge date"
-              placeholder="YYYY-MM-DD"
-              name="discharge.date"
-              component={TextField}
-            />
-            <Field
-              label="Discharge criteria"
-              placeholder="Criteria"
-              name="discharge.criteria"
-              component={TextField}
-            />
-            <Field
-              label="Healthcheck Rating"
-              placeholder="0, 1, 2 or 3"
-              name="healthCheckRating"
-              component={TextField}
-            /> */}
-            <SelectField label="Type" name="type" options={typeOptions} />
             <Grid>
               <Grid item>
                 <Button
@@ -193,39 +182,6 @@ export const AddEntryForm = ({ onSubmit, onCancel }: Props) => {
             </Grid>
           </Form>
         );
-      // }
-      // else {
-      //   return (
-      //     <Form className="form ui">
-      //       <SelectField label="Type" name="type" options={typeOptions} />
-      //       <Grid>
-      //         <Grid item>
-      //           <Button
-      //             color="secondary"
-      //             variant="contained"
-      //             style={{ float: "left" }}
-      //             type="button"
-      //             onClick={onCancel}
-      //           >
-      //             Cancel
-      //           </Button>
-      //         </Grid>
-      //         <Grid item>
-      //           <Button
-      //             style={{
-      //               float: "right",
-      //             }}
-      //             type="submit"
-      //             variant="contained"
-      //             disabled={!dirty || !isValid}
-      //           >
-      //             Add
-      //           </Button>
-      //         </Grid>
-      //       </Grid>
-      //     </Form>
-      //   );
-      // }
       }}
     </Formik>
   );
